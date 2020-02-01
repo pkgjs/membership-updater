@@ -1,0 +1,41 @@
+name: Test
+on:
+  schedule:
+     # - cron:  '* */12 * * *'
+     - cron:  '*/5 * * * *'
+  pull_request:
+  push:
+    branches:
+      - master
+      - 'releases/*'
+  issues:
+    types: [opened, labeled, unlabeled]
+  issue_comment:
+    types: [created]
+  pull_request_review:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    # - name: Download membership.json
+    #   uses: actions/download-artifact@v1
+    #   with:
+    #     name: membership-updater-test-team
+    - run: npm ci
+    - name: update membership
+      uses: ./
+      with:
+        team: membership-updater-test-team
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TEAM_MAINTAINER_TOKEN: ${{ secrets.TEAM_MAINTAINER_TOKEN }}
+    # - name: upload membership.json
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: membership
+    #     path: membership.json
