@@ -1,0 +1,75 @@
+'use strict'
+const core = require('@actions/core')
+const github = require('@actions/github')
+const membership = require('./membership')
+
+;(async function () {
+  try {
+    const repo = github.context.repo
+    const team = core.getInput('team', { required: true })
+    const label = core.getInput('label', { required: true })
+    // const artifact = core.getInput('artifact')
+
+    console.log(github.context)
+    switch (github.context.eventName) {
+      case 'schedule':
+        await onSchedule(process.env.TEAM_MAINTAINER_TOKEN, {
+          ...repo,
+          team,
+          label
+        })
+        break
+      case 'pull_request':
+        await onPullRequest(process.env.GITHUB_TOKEN, {
+          ...repo,
+          number: github.context.number,
+          team,
+          label
+       })
+      case 'push':
+      case 'issues':
+      case 'issue_comment':
+        // @TODO track user activity
+        break
+    }
+  } catch (err) {
+    console.log(err)
+    core.error(err)
+    core.setFailed(err.message)
+  }
+})()
+
+async function onSchedule (token, repo, team) {
+  const client = new github.GitHub(token)
+  const pullsMerged = await membership.processMembership(client, {
+    owner: repo.owner,
+    repo: repo.repo,
+    team: team
+  })
+  if (pullsMerged.length) {
+    console.log(`PRs Merged:
+- ${pullsMerged.map((p) => `#${p.number}: ${p.title}`).join('\n- ')}`)
+  } else {
+    console.log('No PRs merged')
+  }
+  return updatedPulls
+}
+
+async function onPullRequest (token, opts) {
+  const client = new github.GitHub(token)
+  const pull = await client.pulls.get({
+    owner: opts.owner,
+    repo: opts.repo,
+    pull_number: opts.number
+  })
+
+  // If no matching label, skip
+  if (!pull.labels.find((l) => l.name === opts.label)) {
+    return
+  }
+
+  await membership.processPr(client, pull, {
+    owner: repo.owner,
+    repo: repo.repo
+  })
+}
