@@ -1,0 +1,23 @@
+name: Test
+on:
+  pull_request:
+    paths:
+      - '!MEMBERS.md'
+    branches:
+      - master
+  push:
+    paths:
+      - '!MEMBERS.md'
+    branches:
+      - master
+      - 'releases/*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: npm cit
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TEAM_MAINTAINER_TOKEN: ${{ secrets.TEAM_MAINTAINER_TOKEN }}
