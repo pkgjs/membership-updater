@@ -1,0 +1,19 @@
+name: Update Membership
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  pull_request:
+    paths:
+      - MEMBERS.md
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        team: membership-updater-test-team
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TEAM_MAINTAINER_TOKEN: ${{ secrets.TEAM_MAINTAINER_TOKEN }}
