@@ -1,0 +1,13 @@
+name: Membership Updater
+description: Update team membership and list
+author: Wes Todd
+inputs:
+  team:
+    description: Membership updater team
+    required: true
+  artifact:
+    description: Artifact path to save
+    default: membership.json
+runs:
+  using: node12
+  main: index.js
