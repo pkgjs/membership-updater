@@ -7,6 +7,9 @@
 
 A GitHub action to manage group membership
 
+This repository is managed by the [Package Maintenance Working Group](https://github.com/nodejs/package-maintenance), see [Governance](https://github.com/nodejs/package-maintenance/blob/master/Governance.md).
+
+
 ```
 $ npm i @pkgjs/membership-updater
 ```
