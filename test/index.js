@@ -9,7 +9,7 @@ const { processMembershipRequests } = require('../membership')
 suite(pkg.name, () => {
   let client
   before(() => {
-    client = new github.GitHub(process.env.TEAM_MAINTAINER_TOKEN || process.env.GITHUB_TOKEN)
+    client = github.getOctokit(process.env.TEAM_MAINTAINER_TOKEN || process.env.GITHUB_TOKEN)
   })
 
   test('membership', async () => {

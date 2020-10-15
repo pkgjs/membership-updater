@@ -9,11 +9,14 @@ const membership = require('./membership')
     const team = core.getInput('team', { required: true })
     const label = core.getInput('label', { required: true })
     const filename = core.getInput('filename', { required: true })
+    const githubToken = core.getInput('github-token', { required: true })
+    const teamMaintainerToken = core.getInput('team-maintainer-token', { required: true })
+
     // const artifact = core.getInput('artifact')
 
     switch (github.context.eventName) {
       case 'schedule':
-        await onSchedule(process.env.TEAM_MAINTAINER_TOKEN, {
+        await onSchedule(teamMaintainerToken, {
           ...repo,
           team,
           label,
@@ -21,7 +24,7 @@ const membership = require('./membership')
         })
         break
       case 'pull_request':
-        await onPullRequest(process.env.GITHUB_TOKEN, {
+        await onPullRequest(githubToken, {
           ...repo,
           number: github.context.payload.number,
           team,
@@ -43,7 +46,7 @@ const membership = require('./membership')
 })()
 
 async function onSchedule (token, opts) {
-  const client = new github.GitHub(token)
+  const client = github.getOctokit(token)
   const { pullsMerged } = await membership.processMembershipRequests(client, {
     owner: opts.owner,
     repo: opts.repo,
@@ -59,7 +62,7 @@ async function onSchedule (token, opts) {
 
 // Validate membership PRs data
 async function onPullRequest (token, opts) {
-  const client = new github.GitHub(token)
+  const client = github.getOctokit(token)
   const { data: pull } = await client.pulls.get({
     owner: opts.owner,
     repo: opts.repo,

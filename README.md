@@ -9,7 +9,43 @@ A GitHub action to manage group membership
 
 This repository is managed by the [Package Maintenance Working Group](https://github.com/nodejs/package-maintenance), see [Governance](https://github.com/nodejs/package-maintenance/blob/master/Governance.md).
 
+## Inputs
 
-```
-$ npm i @pkgjs/membership-updater
-```
+### Required
+
+#### github-token
+
+Secret GitHub token
+
+#### team-maintainer-token
+
+TBD
+
+#### team
+
+TBD
+
+### Optional
+
+#### artifact
+
+Artifact path to save
+
+_Default:_ `membership.json`
+
+#### label
+
+The label to use for membership requests
+
+_Default:_ `membership-request`
+
+#### filename
+
+The file in which the membership list lives
+
+_Default:_ `README.md`
+
+## Outputs
+
+_n/a_
+
