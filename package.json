@@ -27,7 +27,7 @@
     "standard": "^14.3.1"
   },
   "dependencies": {
-    "@actions/core": "^1.2.2",
+    "@actions/core": "^1.2.6",
     "@actions/github": "^2.1.0",
     "diffparser": "^2.0.1",
     "execa": "^4.0.0",
