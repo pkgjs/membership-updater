@@ -8,12 +8,21 @@ inputs:
   label:
     description: The label to use for membership requests
     default: membership-request
+    required: false
   filename:
     description: The file the members list is in
     default: README.md
+    required: false
   artifact:
     description: Artifact path to save
     default: membership.json
+    required: false
+  github-token:
+    description: GitHub Token
+    required: true
+  team-maintainer-token:
+    description: Team Maintainer Token
+    required: true
 runs:
   using: node12
   main: index.js
