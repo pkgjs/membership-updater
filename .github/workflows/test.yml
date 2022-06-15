@@ -4,12 +4,12 @@ on:
     paths:
       - '!MEMBERS.md'
     branches:
-      - master
+      - main
   push:
     paths:
       - '!MEMBERS.md'
     branches:
-      - master
+      - main
       - 'releases/*'
 
 jobs:
